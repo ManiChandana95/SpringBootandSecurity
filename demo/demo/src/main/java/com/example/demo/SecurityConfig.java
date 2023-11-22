@@ -20,6 +20,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .apply(new JwtConfigurer(jwtTokenProvider));
     }
-    
-    // Other configurations and beans
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("user1").password(passwordEncoder().encode("password1")).roles("USER")
+            .and()
+            .withUser("admin1").password(passwordEncoder().encode("password1")).roles("ADMIN");
+    }
 }
