@@ -36,6 +36,23 @@ public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTo
     // Validate the refresh token
     // Generate a new JWT token (if refresh token is valid) using jwtTokenProvider.generateToken(userDetails)
     // Return the new token in the response
+    String refreshToken = refreshTokenRequest.getRefreshToken();
+
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
+            // You might fetch UserDetails from the database or wherever your user data resides
+            // For simplicity, let's assume UserDetails implements your user details
+            UserDetails userDetails = /* Fetch UserDetails by username */;
+
+            Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken, userDetails);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String newAccessToken = jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(newAccessToken));
+        } else {
+            // Handle invalid or expired refresh token
+            return ResponseEntity.badRequest().body("Invalid or expired refresh token");
+        }
 }
 @PostMapping("/register")
 public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest registrationRequest) {
