@@ -1,7 +1,6 @@
 @Component
 public class JwtTokenProvider {
 
-    // Autowire necessary components or services
     @Value("${jwt.secret}")
     private String secretKey;
 
