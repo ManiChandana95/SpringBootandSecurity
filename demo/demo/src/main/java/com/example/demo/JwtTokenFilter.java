@@ -26,10 +26,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 String username = jwtTokenProvider.getUsernameFromToken(jwt);
-                // You can fetch user details from database or wherever your user data resides
-                // For simplicity, let's assume UserDetails implements your user details
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username); /* Fetch UserDetails by username */;
-
+                 /* Fetch UserDetails by username */;
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
