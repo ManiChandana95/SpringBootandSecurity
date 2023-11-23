@@ -48,5 +48,22 @@ public ResponseEntity<?> logout(HttpServletRequest request) {
     // Perform logout actions if necessary
     // Return success response or appropriate message
 }
+}
+public class LoginRequest {
 
+    private String username;
+    private String password;
+
+    // getters and setters
+}
+
+public class JwtAuthenticationResponse {
+
+    private String accessToken;
+
+    public JwtAuthenticationResponse(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    // getter and setter
 }
