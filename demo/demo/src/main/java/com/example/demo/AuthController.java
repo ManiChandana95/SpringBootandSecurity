@@ -90,6 +90,9 @@ public ResponseEntity<?> logout(HttpServletRequest request) {
     // Invalidate the JWT token (if needed)
     // Perform logout actions if necessary
     // Return success response or appropriate message
+    // Logout might involve clearing client-side storage or performing other actions.
+    //example, we might send a response indicating successful logout:
+        return ResponseEntity.ok("Logout successful");
 }
 }
 public class LoginRequest {
