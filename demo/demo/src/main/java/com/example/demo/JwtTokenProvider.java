@@ -36,12 +36,8 @@ public class JwtTokenProvider {
     }
     
     private boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
+        final Date expiration = getClaimFromToken(token, Claims::getExpiration);
         return expiration.before(new Date());
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
