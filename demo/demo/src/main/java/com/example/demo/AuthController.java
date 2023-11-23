@@ -74,6 +74,7 @@ public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest registrat
         }
 
         // Create a new user entity
+        //User is your entity class representing users in the database.
         User user = new User();
         user.setUsername(registrationRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
