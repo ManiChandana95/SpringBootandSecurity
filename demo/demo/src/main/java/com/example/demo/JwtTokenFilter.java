@@ -15,6 +15,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Implement token processing logic
@@ -25,7 +28,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 String username = jwtTokenProvider.getUsernameFromToken(jwt);
                 // You can fetch user details from database or wherever your user data resides
                 // For simplicity, let's assume UserDetails implements your user details
-                UserDetails userDetails = /* Fetch UserDetails by username */;
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username); /* Fetch UserDetails by username */;
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
