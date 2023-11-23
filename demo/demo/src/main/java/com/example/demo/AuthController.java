@@ -32,32 +32,37 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         // Authenticate user (use authenticationManager.authenticate())
-        // Generate JWT token using jwtTokenProvider.generateToken(userDetails)
-        // Return the generated token in the response
+       
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        
+         // Generate JWT token using jwtTokenProvider.generateToken(userDetails)
         String jwt = jwtTokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
+        
+        // Return the generated token in the response
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
+    
     @PostMapping("/refresh")
-public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-    // Validate the refresh token
-    // Generate a new JWT token (if refresh token is valid) using jwtTokenProvider.generateToken(userDetails)
-    // Return the new token in the response
-    String refreshToken = refreshTokenRequest.getRefreshToken();
-
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        
+        String refreshToken = refreshTokenRequest.getRefreshToken();
+        // Validate the refresh token
         if (jwtTokenProvider.validateToken(refreshToken)) {
             String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
             /* Fetch UserDetails by username */;
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username); 
 
             Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken, userDetails);
+            
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            
+            // Generate a new JWT token 
             String newAccessToken = jwtTokenProvider.generateToken(authentication);
+
+            // Return the new token in the response
             return ResponseEntity.ok(new JwtResponse(newAccessToken));
         } else {
             // Handle invalid or expired refresh token
@@ -65,10 +70,9 @@ public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTo
         }
 }
 @PostMapping("/register")
-public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest registrationRequest) {
-    // Validate and process registration request (create new user, store in database, etc.)
-    // Return success response or appropriate message
-    // Check if the username is already taken
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest registrationRequest) {
+    
+        // Validate and process registration request (create new user, store in database, etc.)
         if (userRepository.existsByUsername(registrationRequest.getUsername())) {
             return ResponseEntity.badRequest().body("Username is already taken!");
         }
@@ -86,12 +90,9 @@ public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest registrat
         return ResponseEntity.ok("User registered successfully!");
 }
 @PostMapping("/logout")
-public ResponseEntity<?> logout(HttpServletRequest request) {
-    // Invalidate the JWT token (if needed)
-    // Perform logout actions if necessary
-    // Return success response or appropriate message
-    // Logout might involve clearing client-side storage or performing other actions.
-    //example, we might send a response indicating successful logout:
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        // Logout might involve clearing client-side storage or performing other actions.
+        //example, we might send a response indicating successful logout:
         return ResponseEntity.ok("Logout successful");
 }
 }
