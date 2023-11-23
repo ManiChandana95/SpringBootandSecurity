@@ -16,6 +16,9 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+    
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
