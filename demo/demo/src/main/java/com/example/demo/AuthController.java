@@ -40,9 +40,8 @@ public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTo
 
         if (jwtTokenProvider.validateToken(refreshToken)) {
             String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
-            // You might fetch UserDetails from the database or wherever your user data resides
-            // For simplicity, let's assume UserDetails implements your user details
-            UserDetails userDetails = /* Fetch UserDetails by username */;
+            /* Fetch UserDetails by username */;
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username); 
 
             Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken, userDetails);
             SecurityContextHolder.getContext().setAuthentication(authentication);
